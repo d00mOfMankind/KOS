@@ -2,8 +2,6 @@ parameter orbitAngle.
 clearscreen.
 
 lock throttle to 1.0.
-set firstStageTank to ship:partstagged("FirstStageTank")[0].
-
 
 print "Launch orbit set for an angle of " + orbitAngle.
 print "Launch in T-Minus...".
@@ -22,20 +20,22 @@ stage.
 wait 5.
 
 //gravity turn
-until ship:velocity:surface:mag >= 900 and ship:apoapsis >= 80000{
-	if 90-MISSIONTIME >= 45{ //we dont want to turn too much...
-		gravityTurn(90-MISSIONTIME).
+until ship:velocity:surface:mag >= 500 and ship:apoapsis >= 80000{
+	if 90-(missiontime-5) >= 45{ //we dont want to turn too much...
+		gravityTurn(90-(missiontime-5)).
 	}else{
 		gravityTurn(45).
+	}
+	
+	if ship:velocity:surface:mag >= 500{
+		lock throttle to 0.7.
+	}else{
+		lock throttle to 1.0.
 	}
 }
 
 //Shot extension
-lock throttle to 0.9.
-gravityTurn(30).
-wait 0.5.
-lock throttle to 0.7.
-gravityTurn(20).
+set orbitHeading to ship:prograde.
 lock throttle to 0.6.
 wait until ship:apoapsis >= 100000.
 lock throttle to 0.
